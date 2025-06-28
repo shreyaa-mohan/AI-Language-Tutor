@@ -40,7 +40,7 @@ This app allows users to:
 
 ### 1. Clone the repo  
 
-git clone https://github.com/your-username/ai-language-tutor.git  
+git clone https://github.com/shreyaa-mohan/AI-Language-Tutor.git
 cd ai-language-tutor  
 ### 2. Install dependencies  
 

@@ -2,9 +2,9 @@ import streamlit as st
 import tempfile
 import os
 import time
-import io # <-- ADD for in-memory files
+import io 
 
-# For Audio
+
 from gtts import gTTS
 import pygame
 
@@ -19,12 +19,10 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 from langchain_huggingface import HuggingFacePipeline 
 from langchain_ollama import ChatOllama
 
-# ----------------------------
-# Model Loading (Cached)
-# ----------------------------
+
 @st.cache_resource
 def load_translation_model(model_name):
-    # (Unchanged)
+
     try:
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
@@ -36,7 +34,6 @@ def load_translation_model(model_name):
 
 @st.cache_resource
 def get_explanation_llm():
-    # (Unchanged)
     try:
         return ChatOllama(model="llama3:8b", temperature=0.3)
     except Exception as e:
@@ -47,7 +44,6 @@ def get_explanation_llm():
 # Core Logic Functions
 # ----------------------------
 def get_translation_explanation(original_text, translated_text, source_lang, target_lang, llm):
-    # (Unchanged)
     explanation_prompt = ChatPromptTemplate.from_template(
         """
         You are a language tutor. A user translated a sentence. Explain the grammatical and cultural nuances.
@@ -65,7 +61,6 @@ def get_translation_explanation(original_text, translated_text, source_lang, tar
         "original_text": original_text, "translated_text": translated_text,
     })
 
-# --- MODIFIED: Text-to-Speech (TTS) ---
 def text_to_speech(text, lang_code):
     """
     Generates audio from text using gTTS and returns the audio data as bytes.
@@ -100,7 +95,6 @@ def text_to_speech(text, lang_code):
         return None
 
 def speech_to_text(lang_code):
-    # (Unchanged)
     r = sr.Recognizer()
     with sr.Microphone() as source:
         st.info("Listening...")
@@ -139,7 +133,6 @@ speech_lang_codes = { "Hindi": ("hi", "hi-IN"), "French": ("fr", "fr-FR"), "Span
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# --- MODIFIED: Display Chat History with Audio ---
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         if "original" in message:
@@ -212,10 +205,8 @@ with col2:
             with st.spinner("Generating explanation..."):
                 explanation = get_translation_explanation(transcribed_text, english_translation, source_lang_2, "English", explanation_llm)
             
-            # --- MODIFIED: Get audio data back ---
             audio_bytes = text_to_speech(english_translation, "en")
 
-            # --- MODIFIED: Store audio in session state ---
             st.session_state.messages.append({
                 "role": "assistant",
                 "translation": english_translation,

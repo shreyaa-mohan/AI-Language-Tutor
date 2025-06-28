@@ -1,0 +1,11 @@
+langchain
+langchain-community
+langchainhub
+streamlit
+python-dotenv
+tavily-python
+reportlab
+chromadb
+lark
+pypdf
+sqlalchemy
